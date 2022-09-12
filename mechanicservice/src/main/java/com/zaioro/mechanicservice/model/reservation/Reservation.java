@@ -1,6 +1,7 @@
-package com.zaioro.mechanicservice.model;
+package com.zaioro.mechanicservice.model.reservation;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.zaioro.mechanicservice.model.ReservationDate;
 import com.zaioro.mechanicservice.model.car.Car;
 import com.zaioro.mechanicservice.model.serviceType.ServiceType;
 import com.zaioro.mechanicservice.model.user.User;
@@ -9,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.NotFound;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -34,28 +36,34 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="dd/MM/yyyy h:mm a")
     private Date choosedDate;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "mechanic_id", referencedColumnName = "id")
+    @NotFound
     private User mechanic;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "client_id", referencedColumnName = "id")
+    @NotFound
     private User client;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "car_id", referencedColumnName = "id")
+    @NotFound
     private Car car;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "service_type_id", referencedColumnName = "id")
+    @NotFound
     private ServiceType serviceType;
 
     @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL)
+    @NotFound
     private Set<ReservationDate> reservationDates;
 
+    private String attachment;
     private String exactDescription;
     private String estimatedCost;
     private String status;

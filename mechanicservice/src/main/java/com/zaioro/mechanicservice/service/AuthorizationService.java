@@ -4,6 +4,7 @@ import com.zaioro.mechanicservice.communicates.UserCommunicates;
 import com.zaioro.mechanicservice.dto.request.UserLoginRequestDto;
 import com.zaioro.mechanicservice.dto.request.UserRegistrationDto;
 import com.zaioro.mechanicservice.dto.response.UserLoginResponseDto;
+import com.zaioro.mechanicservice.dto.response.UserResponseDto;
 import com.zaioro.mechanicservice.exceptions.AccountAwaitingException;
 import com.zaioro.mechanicservice.exceptions.UserAlreadyExistsException;
 import com.zaioro.mechanicservice.exceptions.UserBlockedException;
@@ -28,7 +29,7 @@ public class AuthorizationService {
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
 
-    public String registerUser(UserRegistrationDto userRegistrationDto) throws AccountAwaitingException, UserAlreadyExistsException {
+    public UserResponseDto registerUser(UserRegistrationDto userRegistrationDto) throws AccountAwaitingException, UserAlreadyExistsException {
         Optional<User> foundUser = userRepository.findByEmail(userRegistrationDto.getEmail());
         if(foundUser.isPresent()){
             if(foundUser.get().getStatus().equals(UserStatus.UNVERIFIED)){
@@ -60,12 +61,23 @@ public class AuthorizationService {
                 .lastName(userRegistrationDto.getLastName())
                 .email(userRegistrationDto.getEmail())
                 .password(BCrypt.hashpw(userRegistrationDto.getPassword(), BCrypt.gensalt(12)))
-                .role(UserRole.UNDETERMINED)
+                .role(UserRole.CLIENT)
                 .status(UserStatus.UNVERIFIED)
                 .address(address)
                 .build();
-        userRepository.save(user);
-        return UserCommunicates.USER_SUCCESSFULLY_REGISTERED;
+        user = userRepository.save(user);
+
+        return UserResponseDto.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .status(user.getStatus())
+                .role(user.getRole())
+                .streetNumber(user.getAddress().getStreetNumber())
+                .street(user.getAddress().getStreet())
+                .city(user.getAddress().getCity())
+                .build();
     }
 
     public UserLoginResponseDto loginUser(UserLoginRequestDto userLoginRequestDto) throws UserBlockedException, WrongPasswordException, UserNotExistsException, AccountAwaitingException {

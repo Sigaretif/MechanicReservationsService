@@ -1,14 +1,14 @@
 package com.zaioro.mechanicservice.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.zaioro.mechanicservice.model.car.Car;
+import com.zaioro.mechanicservice.model.reservation.Reservation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.NotFound;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,8 +30,9 @@ public class ReservationDate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "reservation_id", referencedColumnName = "id")
+    @NotFound
     private Reservation reservation;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")

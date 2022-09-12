@@ -1,13 +1,13 @@
 package com.zaioro.mechanicservice.model.serviceType;
 
-import com.zaioro.mechanicservice.model.Reservation;
+import com.zaioro.mechanicservice.model.reservation.Reservation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.NotFound;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,6 +28,7 @@ public class ServiceType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-    @OneToMany(mappedBy = "serviceType", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "serviceType")
+    @NotFound
     private Set<Reservation> reservations;
 }

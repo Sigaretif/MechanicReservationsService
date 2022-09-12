@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Mechanic Reservations System</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand-md bg-dark navbar-dark py-4">
+    <a class="navbar-brand" href="#">Mechanic Reservation System</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/}">Home</a>
+            </li>
+            <li sec:authorize="isAnonymous()" class="nav-item">
+                <a class="nav-link" th:href="@{/login}">Login</a>
+            </li>
+            <li sec:authorize="isAnonymous()" class="nav-item active">
+                <a class="nav-link" th:href="@{/authorization/register}">Register</a>
+            </li>
+            <li sec:authorize="isAuthenticated()" class="nav-item">
+                <a class="nav-link" th:href="@{/user/{id}(id=${#authentication.principal.id})}">Profile</a>
+            </li>
+            <li sec:authorize="hasRole('ROLE_MECHANIC')" class="nav-item">
+                <a class="nav-link" th:href="@{/user/all}">Users</a>
+            </li>
+            <li sec:authorize="hasRole('ROLE_MECHANIC')" class="nav-item">
+                <a class="nav-link" th:href="@{/mechanic/reservations}">Reservations</a>
+            </li>
+            <!--            <li sec:authorize="hasRole('ROLE_CLIENT')" class="nav-item">-->
+            <!--                <a class="nav-link" th:href="@{/user/reservations/{id}(id=${#authentication.principal.id})}">My Reservations</a>-->
+            <!--            </li>-->
+
+            <li sec:authorize="hasRole('ROLE_CLIENT')" class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Reservations
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                    <a class="dropdown-item" th:href="@{/user/reservations/{id}(id=${#authentication.principal.id})}">My Reservations</a>
+                    <!--                    <div class="dropdown-divider"></div>-->
+                    <a class="dropdown-item" th:href="@{/client/addreservation/{id}(id=${#authentication.principal.id})}">Add Reservation</a>
+                </div>
+            </li>
+
+            <!--            <li sec:authorize="hasRole('ROLE_CLIENT')" class="nav-item">-->
+            <!--                <a class="nav-link" th:href="@{/user/cars/{id}(id=${#authentication.principal.id})}">My Cars</a>-->
+            <!--            </li>-->
+            <li sec:authorize="hasRole('ROLE_CLIENT')" class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Cars
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
+                    <a class="dropdown-item" th:href="@{/user/cars/{id}(id=${#authentication.principal.id})}">My Cars</a>
+                    <!--                    <div class="dropdown-divider"></div>-->
+                    <a class="dropdown-item" th:href="@{/client/addcar/{id}(id=${#authentication.principal.id})}">Add Car</a>
+                </div>
+            </li>
+
+
+        </ul>
+        <form class="form" form-method="post" th:action="@{/logout}" >
+            <span sec:authorize="isAuthenticated()" sec:authentication="name" class="navbar-text"></span>
+            <!--            <span sec:authorize="isAuthenticated()" sec:authentication="principal.firstName" class="navbar-text"></span>-->
+            <!--            <span sec:authorize="isAuthenticated()" sec:authentication="principal.id" class="navbar-text"></span>-->
+            <button sec:authorize="isAuthenticated()" class="btn btn-outline-danger" type="submit">Logout</button>
+            <button sec:authorize="isAnonymous()" th:href="@{/login}" class="btn btn-outline-info" type="submit">Login</button>
+        </form>
+    </div>
+</nav>
+<br>
+<br>
+<div class="container-fluid text-center" style="max-width: 500px; margin: 0 auto;">
+    <div class = "row-centered">
+        <h1>Registration Successful!</h1>
+    </div>
+    <div class="border border-secondary p-3 rounded">
+        <div class = "container">
+            <div class = "row">
+                <div class="col-sm text-centered">
+                    <label>You can now log in, but your account needs to be verified before you can make reservations</label>
+                </div>
+            </div>
+            <div class = "row">
+                <div class="col-sm text-centered">
+                    <a th:href = "@{/login}" class="btn btn-dark">Go back to login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

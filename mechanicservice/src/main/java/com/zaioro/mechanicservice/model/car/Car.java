@@ -1,12 +1,13 @@
 package com.zaioro.mechanicservice.model.car;
 
-import com.zaioro.mechanicservice.model.Reservation;
+import com.zaioro.mechanicservice.model.reservation.Reservation;
 import com.zaioro.mechanicservice.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.NotFound;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -34,9 +35,11 @@ public class Car {
     private String model;
     private Integer yearOfProduction;
     private String body;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @NotFound
     private User user;
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
+    @NotFound
     private Set<Reservation> reservations;
 }

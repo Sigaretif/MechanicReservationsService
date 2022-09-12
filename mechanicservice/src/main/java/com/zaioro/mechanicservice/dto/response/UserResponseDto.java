@@ -14,4 +14,7 @@ public class UserResponseDto {
     private String email;
     private String role;
     private String status;
+    private String city;
+    private String street;
+    private String streetNumber;
 }

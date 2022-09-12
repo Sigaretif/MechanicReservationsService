@@ -1,13 +1,14 @@
 package com.zaioro.mechanicservice.model.user;
 
 import com.zaioro.mechanicservice.model.Address;
-import com.zaioro.mechanicservice.model.Reservation;
+import com.zaioro.mechanicservice.model.reservation.Reservation;
 import com.zaioro.mechanicservice.model.car.Car;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.NotFound;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -39,8 +40,9 @@ public class User {
     private String password;
     private String role;
     private String status;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "address_id", referencedColumnName = "id")
+    @NotFound
     private Address address;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Car> cars;

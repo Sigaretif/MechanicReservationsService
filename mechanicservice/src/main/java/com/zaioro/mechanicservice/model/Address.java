@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.NotFound;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -32,6 +33,7 @@ public class Address {
     private String streetNumber;
     private String postalCode;
     private String postalRegion;
-    @OneToMany(mappedBy = "address", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "address")
+    @NotFound
     private Set<User> users;
 }
